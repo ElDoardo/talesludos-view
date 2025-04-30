@@ -1,0 +1,45 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+blockquote {
+  border-left: 4px solid #ccc;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 16px;
+}
+
+.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+}
+
+ul[data-checked] > li::before {
+  pointer-events: none;
+}
+
+ul[data-checked=true],
+ul[data-checked=false] {
+  pointer-events: none;
+}
+ul[data-checked=true] > li *,
+ul[data-checked=false] > li * {
+  pointer-events: all;
+}
+ul[data-checked=true] > li::before,
+ul[data-checked=false] > li::before {
+  color: #777;
+  cursor: pointer;
+  pointer-events: all;
+}
+ul[data-checked=true] > li::before {
+  content: '\2611';
+}
+ul[data-checked=false] > li::before {
+  content: '\2610';
+}
