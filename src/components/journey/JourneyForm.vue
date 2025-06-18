@@ -45,6 +45,7 @@
           accept="image/jpeg, image/png"
           placeholder="Escolha o arquivo ou arraste aqui..."
           drop-placeholder="Arraste o arquivo aqui..."
+          plain
         ></b-form-file>
         <!-- <div class="mt-3">imagem: {{ files ? files.name : '' }}</div> -->
         <img v-if="changeImage" :src="imageData" class="center p-4 img-responsive" width="200px;" />
@@ -112,7 +113,7 @@ export default {
       imageData: "",
       content: "",
       changeImage: !this.update,
-      files: [],
+      files: null,
       areasToSelect: [],
       show: true,
       customModulesForEditor: [
@@ -151,9 +152,11 @@ export default {
   },
   methods: {
     onFileChange(event) {
-      let files = event.target.files || event.dataTransfer.files;
-      if (!files.length) return;
-      this.createImage(files[0]);
+      console.log('Event change:', event);
+      console.log('Files:', event.target.files);
+      this.files = event.target.files[0];
+      console.log('Arquivo atribuído:', this.files);
+      this.createImage(this.files);
       this.changeImage = true;
     },
     
@@ -168,30 +171,41 @@ export default {
     
     async onSubmit(evt) {
       evt.preventDefault();
+      console.log('Arquivo selecionado:', this.files); // Debug 1
       
-      // Verifica se tem imagem (obrigatória para criação)
-      if (!this.update && !this.imageData) {
+      if (!this.update && !this.files) { 
+        console.log('Nenhum arquivo selecionado');// Debug 2
         this.$snotify.error('A escolha da IMAGEM é obrigatória', 'Erro');
         return;
       }
 
-      const payload = {
-        id: this.journey.id,
-        title: this.journey.title,
-        description: this.journey.description,
-        area_id: this.journey.area_id,
-        publish: this.journey.publish,
-        imageData: this.imageData // Envia direto o base64
-      };
+      const formData = new FormData();
+      formData.append('title', this.journey.title);
+      formData.append('description', this.journey.description);
+      formData.append('area_id', this.journey.area_id);
+      formData.append('publish', this.journey.publish ? '1' : '0');
+      
+      if (this.files) {
+        console.log('Arquivo anexado:', this.files[0]); // Debug 3
+        formData.append('imageData', this.files);
+      }
 
       try {
+        console.log('Enviando dados...'); // Debug 4
+        for (let [key, value] of formData.entries()) {
+          console.log(key, value);
+        }
         let response;
         if (this.update) {
-          response = await this.$store.dispatch("updateJourney", payload);
+          console.log('Modo atualização'); // Debug 5
+          formData.append('id', this.journey.id);
+          response = await this.$store.dispatch("updateJourney", formData);
         } else {
-          response = await this.$store.dispatch("addJourney", payload);
+          console.log('Modo criação'); // Debug 6
+          response = await this.$store.dispatch("addJourney", formData);
         }
 
+        console.log('Resposta recebida:', response); // Debug 7
         if (response.data.id) {
           this.$router.push({
             name: "DrawGame",
@@ -203,6 +217,7 @@ export default {
           });
         }
       } catch (error) {
+        console.error('Erro no submit:', error.response); // Debug 8
         this.$snotify.error(
           error.response?.data?.message || 'Erro ao salvar jornada', 
           "Erro"

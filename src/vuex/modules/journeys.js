@@ -29,18 +29,20 @@ export default {
                 .catch()
                 .finally(() => context.commit('LOADING', false));
         },
-        addJourney({}, formData) {
+       addJourney({}, formData) {
             return new Promise((resolve, reject) => {
-                api.post('/journey/store', formData, { headers: { "Content-Type": "multipart/form-data" } })
-                    .then(response => resolve(response))
-                    .catch(error => reject(error));
+            // REMOVA o header Content-Type - o browser vai definir automaticamente
+            // incluindo o boundary necessário
+            api.post('/journey/store', formData)
+                .then(response => resolve(response))
+                .catch(error => reject(error));
             });
         },
         updateJourney({}, formData) {
             return new Promise((resolve, reject) => {
-                api.post('/journey/update/' + formData.get('id'), formData, { headers: { "Content-Type": "multipart/form-data" } })
-                    .then(response => resolve(response))
-                    .catch(error => reject(error));
+            api.post('/journey/update/' + formData.get('id'), formData)
+                .then(response => resolve(response))
+                .catch(error => reject(error));
             });
         },
         deleteJourney({}, id) {

@@ -11,10 +11,13 @@ export default {
     },
     mutations: {
         FETCHGAME(state, game) {
-            state.form.marks = game.marks === "" ? { coords: [], nextMark: 1 } : JSON.parse(game.marks);
-            state.form.links = game.links === "" ? [] : JSON.parse(game.links);
-            state.form.scenes = game.scenes === "" ? [] : JSON.parse(game.scenes);
-            state.form.challenges = game.challenges === "" ? [] : JSON.parse(game.challenges);
+            console.log(game);
+            console.log(state);
+            
+            state.form.marks = game.marks ? { coords: [], nextMark: 1 } : JSON.parse(game.marks);
+            state.form.links = game.links ? [] : JSON.parse(game.links);
+            state.form.scenes = game.scenes ? [] : JSON.parse(game.scenes);
+            state.form.challenges = game.challenges ? [] : JSON.parse(game.challenges);
         },
     },
     actions: {
