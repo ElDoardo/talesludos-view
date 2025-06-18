@@ -33,12 +33,9 @@ export default {
   },
   created: function () {
     console.log("Game Canvas created");
-    // console.log("image = " + this.image);
-    // console.log(this.marks);
   },
   mounted: function () {
     console.log("Game Canvas mounted");
-    // console.log("image = " + this.image);
     this.isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0; // detecta se é mobile
   },
   computed: {
@@ -53,10 +50,9 @@ export default {
   },
   methods: {
     preload(sketch) {
-      //   console.log("Image (preload sketch) = " + this.image);
-      this.back = sketch.loadImage("/storage/" + this.image);
+      this.back = sketch.loadImage('http://localhost:3000/api/journey/'+ this.image);
       this.w = this.$refs.tela.clientWidth;
-      //this.h = (this.w / this.back.width) * this.back.height;
+      // this.h = (this.w / this.back.width) * this.back.height;
     },
     setup(sketch) {
       this.$nextTick(() => {
@@ -64,7 +60,7 @@ export default {
       });
       window.addEventListener("resize", () => {
         this.w = this.$refs.tela.clientWidth;
-        //this.h = (this.w / this.back.width) * this.back.height;
+        // this.h = (this.w / this.back.width) * this.back.height;
         sketch.resizeCanvas(this.w, this.h);
       });
     },
@@ -171,7 +167,6 @@ export default {
             });
 
             this.marks.nextMark++;
-
             // gerando links automaticamente
             if (this.marks.coords.length > 1) {
               this.links.push({
@@ -214,7 +209,6 @@ export default {
       sketch.stroke(0);
       sketch.strokeWeight(2);
       sketch.noTint();
-
       if (this.back) sketch.image(this.back, 0, 0, this.w, this.h);
 
       let lastPoint = null;

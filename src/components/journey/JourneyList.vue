@@ -75,7 +75,7 @@
 <script>
 import instructions from "./Instructions.vue";
 import { mapState, mapActions } from "vuex";
-
+import axios from 'axios';
 export default {
   components: {
     instructions
@@ -122,27 +122,40 @@ export default {
       this.fetchJourney(this.params);
     },
     playGame(userid, id) {
-      return "/storage/games/" + userid + "/" + id + "/Game1/index.html";
+      return "http://localhost:3000/storage/games/" + userid + "/" + id + "/Game1/index.html";
     },
-    forceFileDownload(response) {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "talesludos.zip"); //or any other extension
-      document.body.appendChild(link);
-      link.click();
+    async download(userid, id) {
+      try {
+        const url = `http://localhost:3000/api/journey/download/${userid}/${id}`;
+
+        const response = await axios.get(url, {
+          responseType: 'blob',
+        });
+
+        let filename = `jornada-${id}.zip`;
+        const disp = response.headers['content-disposition'];
+        if (disp) {
+          const match = /filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i.exec(disp);
+          filename = decodeURIComponent(match?.[1] || match?.[2] || filename);
+        }
+
+        this.forceFileDownload(response.data, filename);
+      } catch (err) {
+        this.$snotify?.error('Erro no download do jogo', 'Erro');
+        console.error(err);
+      }
     },
-    download(userid, id) {
-      let uri = "api/journey/download/" + userid + "/" + id;
-      axios({
-        method: "get",
-        url: uri,
-        responseType: "arraybuffer"
-      })
-        .then(response => {
-          this.forceFileDownload(response);
-        })
-        .catch(() => this.$snotify.error("Erro no download do jogo", "Erro"));
+
+    forceFileDownload(blobData, filename = 'arquivo.zip') {
+      const blob = new Blob([blobData], { type: 'application/zip' });
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(href);
     }
   }
 };

@@ -38,7 +38,9 @@ export default {
   },
   computed: {
     image() {
-      return "/storage/" + this.journey.imagePath;
+      console.log(this.journey)
+      const fileName = this.journey.imagePath.split('/');
+       return 'http://localhost:3000/api/journey/'+ this.journey.user_id+'/'+fileName[1];
     }
   },
   methods: {
