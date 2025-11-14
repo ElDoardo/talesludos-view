@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import api from '../../api';
 export default {
   data() {
     return {
@@ -99,8 +100,7 @@ export default {
     contact() {
       self = this;
       this.sending = true;
-      axios
-        .post("/api/submit", this.form)
+      api.post("/submit", this.form)
         .then(response => {
           self.sending = false;
           self.$snotify.success("Mensagem enviada com sucesso", "OK");
@@ -110,6 +110,7 @@ export default {
           self.sending = false;
           this.errors = error.response.data.errors;
         });
+
     }
   }
 };
