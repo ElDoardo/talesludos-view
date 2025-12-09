@@ -321,8 +321,8 @@ export default {
     // state.games.form = state form in games module vuex
     ...mapState({ form: state => state.games.form }),
     backImage: function () {
-      debugger
-      return 'http://localhost:3000/api/journey/'+ this.image;
+      const arrayPath = this.image.split('/');
+      return `http://localhost:3000/api/users/${arrayPath[0]}/files/${arrayPath[1]}`;
     },
     idMarked: function () {
       return this.form.marks.coords[this.markedpoint].id;

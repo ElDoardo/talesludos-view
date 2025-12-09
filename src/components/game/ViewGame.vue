@@ -40,12 +40,12 @@ export default {
     image() {
       console.log(this.journey)
       const fileName = this.journey.imagePath.split('/');
-       return 'http://localhost:3000/api/journey/'+ this.journey.user_id+'/'+fileName[1];
+       return `http://localhost:3000/api/users/${this.journey.user_id}/files/${fileName[1]}`;
     }
   },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      this.$router.push({ name: "JourneyList", params: { all: false } });
     },
     confirmDelete(journey) {
       this.journeyId = journey.id;
@@ -81,7 +81,7 @@ export default {
     destroy() {
       this.$store
         .dispatch("deleteJourney", this.$route.params.id)
-        .then(() => this.$router.go(-1))
+        .then(() => this.$router.push({ name: "JourneyList", params: { all: false } }))
         .catch(error => this.$snotify.error("Erro ao deletar jogo", "Erro"));
     }
   }

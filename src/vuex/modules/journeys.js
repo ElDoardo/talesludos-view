@@ -17,14 +17,15 @@ export default {
     actions: {
         fetchJourney(context, params) {
             context.commit('LOADING', true);
-            return api.get('/journey/index', { params })
+            const userId = localStorage.getItem('userId')
+            return api.get(`/users/${userId}/journeys`)
                 .then(response => context.commit('FETCH', response.data))
                 .catch()
                 .finally(() => context.commit('LOADING', false));
         },
         fetchAllJourney(context, params) {
             context.commit('LOADING', true);
-            return api.get('/journey/listall', { params })
+            return api.get('/journeys', { params })
                 .then(response => context.commit('FETCH', response.data))
                 .catch()
                 .finally(() => context.commit('LOADING', false));
@@ -33,21 +34,21 @@ export default {
             return new Promise((resolve, reject) => {
             // REMOVA o header Content-Type - o browser vai definir automaticamente
             // incluindo o boundary necessário
-            api.post('/journey/store', formData)
+            api.post('/journeys', formData)
                 .then(response => resolve(response))
                 .catch(error => reject(error));
             });
         },
         updateJourney({}, formData) {
             return new Promise((resolve, reject) => {
-            api.post('/journey/update/' + formData.get('id'), formData)
+            api.put(`/journeys/${formData.get('id')}`, formData)
                 .then(response => resolve(response))
                 .catch(error => reject(error));
             });
         },
         deleteJourney({}, id) {
             return new Promise((resolve, reject) => {
-                api.delete('/journey/destroy/' + id)
+                api.delete(`/journeys/${id}/`)
                     .then(response => resolve(response.data))
                     .catch(error => reject(error));
             });

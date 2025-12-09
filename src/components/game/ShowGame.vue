@@ -32,7 +32,7 @@ export default {
     };
   },
   created: function() {
-    let uri = "/journey/view/" + this.$route.params.id;
+    let uri = `/journeys/${this.$route.params.id}`;
     axios.get(uri).then(response => {
       this.journey = response.data;
     });
@@ -78,7 +78,7 @@ export default {
       );
     },
     destroy() {
-      let url = "/journey/destroy/" + this.$route.params.id;
+      let url = `/journeys/${this.$route.params.id}/`;
       axios
         .delete(url)
         .then(response => {

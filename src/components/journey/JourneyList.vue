@@ -126,7 +126,7 @@ export default {
     },
     async download(userid, id) {
       try {
-        const url = `http://localhost:3000/api/journey/download/${userid}/${id}`;
+        const url = `http://localhost:3000/api/users/${userid}/journey-exports/${id}`;
 
         const response = await axios.get(url, {
           responseType: 'blob',

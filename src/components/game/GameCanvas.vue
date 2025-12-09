@@ -50,7 +50,9 @@ export default {
   },
   methods: {
     preload(sketch) {
-      this.back = sketch.loadImage('http://localhost:3000/api/journey/'+ this.image);
+      console.log(this.image);
+      const arrayPath = this.image.split('/');
+      this.back = sketch.loadImage(`http://localhost:3000/api/users/${arrayPath[0]}/files/${arrayPath[1]}`);
       this.w = this.$refs.tela.clientWidth;
       // this.h = (this.w / this.back.width) * this.back.height;
     },

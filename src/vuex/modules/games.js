@@ -22,7 +22,7 @@
         },
         actions: {
             editGame({ commit }, id) {
-                return api.get('/game/edit/' + id)
+                return api.get(`journeys/${id}/games/`)
                     .then(response => {
                         commit('FETCHGAME', response.data.game)
                     })
@@ -36,7 +36,7 @@
                     challenges: JSON.stringify(state.form.challenges)
                 };
                 return new Promise((resolve, reject) => {
-                    api.put('/game/update/' + id, game)
+                    api.put(`/journeys/${id}/games/`, game)
                         .then(response => resolve(response))
                         .catch(error => reject(error));
                 });

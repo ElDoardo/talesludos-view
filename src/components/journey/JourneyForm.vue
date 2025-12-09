@@ -136,7 +136,8 @@ export default {
     image() {
       // const fileName = this.journey.imagePath.split('\\');
        //return "/storage" + this.journey.imagePath;
-       return 'http://localhost:3000/api/journey/'+ this.journey.imagePath;
+      const arrayPath = this.journey.imagePath.split('/');
+      return `http://localhost:3000/api/users/${arrayPath[0]}/files/${arrayPath[1]}`;
       // return "/storage/" + this.journey.imagePath;
     }
   },

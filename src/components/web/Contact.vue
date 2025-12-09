@@ -100,7 +100,7 @@ export default {
     contact() {
       self = this;
       this.sending = true;
-      api.post("/submit", this.form)
+      api.post("/contacts", this.form)
         .then(response => {
           self.sending = false;
           self.$snotify.success("Mensagem enviada com sucesso", "OK");

@@ -22,6 +22,7 @@ const actions = {
             api.post('/auth/login', formData)
                 .then(response => {
                     context.commit('AUTH_USER_OK', response.data.user)
+                    localStorage.setItem('userId', response.data.user.id)
                     localStorage.setItem('token', response.data.access_token)
                     resolve(response)
                 })
@@ -61,7 +62,7 @@ const actions = {
 
     forgotpassword({ }, formData) {
         return new Promise((resolve, reject) => {
-            api.post("/auth/forgotpassword", formData)
+            api.post("/auth/forgot-password", formData)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -73,7 +74,7 @@ const actions = {
 
     resetpassword({ }, formData) {
         return new Promise((resolve, reject) => {
-            api.post("/auth/resetpassword", formData)
+            api.post("/auth/reset-password", formData)
                 .then(response => {
                     resolve(response);
                 })
